@@ -115,6 +115,18 @@ func TestTransferTx(t *testing.T) {
 }
 
 
+func TestTransferTxError(t *testing.T) {
+	store := NewStore(testDB)
+
+	_, err := store.TransferTx(context.Background(), TransferTxParams{
+		FromAccountID: -1,
+		ToAccountID:   -2,
+		Amount:        10,
+	})
+
+	require.Error(t, err)
+}
+
 func TestTransferTxDeadlock(t *testing.T) {
     store := NewStore(testDB)
 
