@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+	"database/sql"
 	"testing"
 	"time"
 
@@ -47,4 +48,23 @@ func TestGetUser(t *testing.T) {
     require.Equal(t, user1.Email, user2.Email)
     require.WithinDuration(t, user1.PasswordChangedAt, user2.PasswordChangedAt, time.Second)
     require.WithinDuration(t, user1.CreatedAt, user2.CreatedAt, time.Second)
+}
+
+func TestGetUserNotFound(t *testing.T) {
+	_, err := testQueries.GetUser(context.Background(), util.RandomOwner())
+	require.ErrorIs(t, err, sql.ErrNoRows)
+}
+
+func TestCreateUserDuplicate(t *testing.T) {
+	user := createRandomUser(t)
+
+	arg := CreateUserParams{
+		Username:       user.Username,
+		HashedPassword: "secret",
+		FullName:       util.RandomOwner(),
+		Email:          util.RandomEmail(),
+	}
+
+	_, err := testQueries.CreateUser(context.Background(), arg)
+	require.Error(t, err)
 }
