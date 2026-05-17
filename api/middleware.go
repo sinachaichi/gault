@@ -21,8 +21,6 @@ const (
 func authMiddleWare(tokenMaker token.Maker) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		authorizationHeaderKey := ctx.GetHeader(authorizationHeaderKey)
-		fmt.Println(authorizationHeaderKey)
-		fmt.Println("*************************************")
 		if len(authorizationHeaderKey) == 0 {
 			err := errors.New("authorization key is not provided")
 			ctx.AbortWithStatusJSON(http.StatusUnauthorized, errorResponse(err))
