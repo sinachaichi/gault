@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gault-deployment
+  labels:
+    app: gault-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gault-api
+  template:
+    metadata:
+      labels:
+        app: gault-api
+    spec:
+      containers:
+      - name: gault-api
+        image: 006874181680.dkr.ecr.eu-west-3.amazonaws.com/gault:4d7d1ed6e59baa2085a293f33454176413f3e062
+        ports:
+        - containerPort: 8080
+
+
